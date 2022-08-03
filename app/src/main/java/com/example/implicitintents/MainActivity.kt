@@ -1,6 +1,6 @@
 package com.example.implicitintents
 
-import android.annotation.SuppressLint
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,30 +28,34 @@ class MainActivity : AppCompatActivity() {
         mShareTextEditText = findViewById(R.id.share_edittext)
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     fun openWebSite(view: View) {
         val url = mWebsiteEditText?.text.toString()
         val webpage: Uri = Uri.parse(url)
-        val intent =
-            Intent(Intent.ACTION_VIEW, webpage) // можна запхати Uri.parse(url) замість webpage?
-        if (intent.resolveActivity(packageManager) != null) { //це тіпа якщо якась приложуха для откриття установлена (!= null) то startActivity(intent)??
+        val intent = Intent(Intent.ACTION_VIEW, webpage)
+        if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         } else {
             Log.d("ImplicitIntents", "Can't handle this!")
         }
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     fun openLocation(view: View) {
         val loc = mLocationEditText?.text.toString()
         val addressUri = Uri.parse("geo:0,0?q=$loc")
         val intent = Intent(Intent.ACTION_VIEW, addressUri)
-        if (intent.resolveActivity(packageManager) != null) {
+//        if (intent.resolveActivity(packageManager) != null) {
+//            startActivity(intent)
+//        } else {
+//            Log.d("ImplicitIntents", "Can't handle this intent!")
+//        }
+//    }
+        try {
             startActivity(intent)
-        } else {
+        } catch (e: Exception) {
             Log.d("ImplicitIntents", "Can't handle this intent!")
         }
     }
+
 
     fun shareText(view: View) {
         val txt = mShareTextEditText?.text.toString()
